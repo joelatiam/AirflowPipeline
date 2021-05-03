@@ -7,9 +7,6 @@ from operators import (StageToRedshiftOperator, LoadFactOperator,
                                 LoadDimensionOperator, DataQualityOperator)
 from helpers import SqlQueries
 
-config = configparser.ConfigParser()
-config.read('../ppl.cfg')
-
 S3_BUCKET = 'udacity-dend'
 S3_LOGS_PATH = 'log_data'
 S3_SONGS_PATH = 'song_data'
@@ -17,7 +14,7 @@ S3_SONGS_PATH = 'song_data'
 
 default_args = {
     'owner': 'joelatiam',
-    'start_date': datetime.now(),
+    'start_date': datetime(2021, 5, 3),
     'depends_on_past': False,
     'retries': 3,
     'retry_delay': timedelta(minutes=5),
@@ -28,7 +25,7 @@ default_args = {
 dag = DAG('sparkify_dag',
           default_args=default_args,
           description='Load and transform data in Redshift with Airflow',
-          schedule_interval='0 * * * *'
+          schedule_interval=None
         )
 
 start_operator = DummyOperator(task_id='Begin_execution',  dag=dag)
