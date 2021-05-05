@@ -9,6 +9,7 @@ from helpers import SqlQueries
 
 S3_BUCKET = 'udacity-dend'
 S3_LOGS_PATH = 'log_data'
+S3_LOG_JSONPATH='log_json_path.json'
 S3_SONGS_PATH = 'song_data'
 
 
@@ -37,6 +38,7 @@ stage_events_to_redshift = StageToRedshiftOperator(
     table="staging_events",
     s3_bucket=S3_BUCKET,
     s3_key=S3_LOGS_PATH,
+    s3_json_format=S3_LOG_JSONPATH,
     dag=dag
 )
 
@@ -52,6 +54,9 @@ stage_songs_to_redshift = StageToRedshiftOperator(
 
 load_songplays_table = LoadFactOperator(
     task_id='Load_songplays_fact_table',
+    redshift_conn_id="redshift",
+    table="songplays",
+    select_query = SqlQueries.songplay_table_insert,
     dag=dag
 )
 
