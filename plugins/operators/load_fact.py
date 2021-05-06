@@ -4,7 +4,7 @@ from airflow.models import BaseOperator
 from airflow.utils.decorators import apply_defaults
 
 class LoadFactOperator(BaseOperator):
-    append_sql = """
+    insert_sql = """
         INSERT INTO {}
         {}
     """
@@ -35,7 +35,7 @@ class LoadFactOperator(BaseOperator):
 
         self.log.info("Copying data from Staging table to Fact table")
 
-        load_data_sql = LoadFactOperator.append_sql.format(
+        load_data_sql = LoadFactOperator.insert_sql.format(
             self.table,
             self.select_query
         )
