@@ -25,7 +25,7 @@ default_args = {
 dag = DAG('sparkify_dag',
           default_args=default_args,
           description='Load and transform data in Redshift with Airflow',
-          schedule_interval=None
+          schedule_interval='0 * * * *'
         )
 
 start_operator = DummyOperator(task_id='Begin_execution',  dag=dag)
@@ -58,6 +58,7 @@ load_songplays_table = LoadFactOperator(
     redshift_conn_id='redshift',
     table='songplays',
     select_query = SqlQueries.songplay_table_insert,
+    append_data = False,
     dag=dag
 )
 
@@ -72,6 +73,7 @@ load_user_dimension_table = LoadDimensionOperator(
     redshift_conn_id='redshift',
     table='users',
     select_query = SqlQueries.user_table_insert,
+    append_data = False,
     dag=dag
 )
 
@@ -86,6 +88,7 @@ load_song_dimension_table = LoadDimensionOperator(
     redshift_conn_id='redshift',
     table='songs',
     select_query = SqlQueries.song_table_insert,
+    append_data = False,
     dag=dag
 )
 
@@ -114,6 +117,7 @@ load_time_dimension_table = LoadDimensionOperator(
     redshift_conn_id='redshift',
     table='time',
     select_query = SqlQueries.time_table_insert,
+    append_data = False,
     dag=dag
 )
 
